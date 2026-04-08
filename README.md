@@ -64,7 +64,7 @@ graph TD
     WP6 --> F6_7[개인 자산 로드맵 퀘스트 및 뱃지 시스템]
     WP6 --> F6_8[할부 누적 시각화 및 통합 경고]
 ```
-```
+```mermaid
 graph TD
     Root[<b>AI 자산 관리 에이전트</b>] -- "관제" --> WP1
     Root -- "지능" --> WP2
@@ -146,6 +146,7 @@ graph TD
 ```
 
 ```mindmap
+mindmap
   root((AI 자산 관리 OS))
     데이터/보안
       금융 API 연동
