@@ -1,0 +1,8 @@
+# Path: requirements.txt
+fastapi
+uvicorn
+sqlalchemy
+psycopg2-binary
+pgvector
+pydantic[email]
+python-dotenv
