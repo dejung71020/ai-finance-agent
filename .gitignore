@@ -1,0 +1,82 @@
+# Path: .gitignore
+
+# --- Python ---
+__pycache__/
+*.py[cod]
+*$py.class
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# --- Virtual Environments ---
+.venv/
+venv/
+ENV/
+env/
+pythonenv*/
+
+# --- Environment Variables (CRITICAL: 보안을 위해 절대 커밋 금지) ---
+.env
+.env.*
+!.env.example
+
+# --- Databases ---
+*.db
+*.sqlite3
+# PostgreSQL/Supabase 로컬 덤프 파일 등
+*.sql
+*.dump
+
+# --- AI/Machine Learning ---
+# 대용량 모델 파일이나 데이터셋
+models/
+data/
+*.h5
+*.pkl
+*.pt
+*.onnx
+
+# --- IDEs & Editors ---
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.project
+.pydevproject
+.settings/
+
+# --- OS ---
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# --- Logs ---
+*.log
+logs/
+.python-version
+
+# --- Testing ---
+.pytest_cache/
+.tox/
+.nosexy/
+nosetests.xml
+coverage.xml
+*.cover
+.coverage
+htmlcov/
