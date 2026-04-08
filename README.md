@@ -1,5 +1,6 @@
 # ai-finance-agent
 
+```mermaid
 graph TD
     %% 전체 프로젝트 루트
     Root[AI 자산 관리 에이전트: Personal Finance OS]
@@ -62,3 +63,4 @@ graph TD
     WP6 --> F6_6[경조사비 기록 및 가이드라인]
     WP6 --> F6_7[개인 자산 로드맵 퀘스트 및 뱃지 시스템]
     WP6 --> F6_8[할부 누적 시각화 및 통합 경고]
+```
