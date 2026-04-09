@@ -64,6 +64,7 @@ graph TD
     WP6 --> F6_7[개인 자산 로드맵 퀘스트 및 뱃지 시스템]
     WP6 --> F6_8[할부 누적 시각화 및 통합 경고]
 ```
+
 ```mermaid
 graph TD
     Root[<b>AI 자산 관리 에이전트</b>] -- "관제" --> WP1
@@ -192,4 +193,107 @@ mindmap
       경조사비 가이드
       자산 로드맵
       할부 누적 경고
+```
+
+````markdown
+📑 AI Finance Assistant (Backend)
+사용자의 금융 데이터를 분석하여 지능적인 코칭과 자동화를 제공하는 AI 비서 서비스
+
+본 프로젝트는 **FastAPI**와 **Supabase**(PostgreSQL + pgvector)를 기반으로 구축되었으며, 총 **45개의 핵심 금융 관리 기능**을 포함하고 있습니다.
+
+### 🛠 Tech Stack
+
+- **Framework**: FastAPI
+- **Database**: Supabase (PostgreSQL + pgvector)
+- **ORM**: SQLAlchemy
+- **Language**: Python 3.10+
+- **AI**: Gemini / OpenAI API (예정)
+
+### Getting Started
+
+#### 1. Prerequisites
+
+- Python 3.10 이상 설치
+- Supabase 프로젝트 생성 및 DB 암호 준비
+
+#### 2. Environment Setup
+
+먼저 프로젝트를 클론하고 가상 환경을 구축합니다.
+
+```bash
+# 가상환경 생성 및 활성화
+python -m venv venv
+source venv/bin/activate          # Windows: venv\Scripts\activate
+
+# 필수 패키지 설치
+pip install -r requirements.txt
+```
+````
+
+#### 3. Database & Secret Configuration
+
+루트 디렉토리에 `.env` 파일을 생성하고 Supabase 연결 정보를 입력합니다.
+
+```env
+# .env
+DATABASE_URL=postgresql://postgres:[PASSWORD]@[HOST]:5432/postgres
+OPENAI_API_KEY=your_api_key_here
+GEMINI_API_KEY=your_api_key_here
+```
+
+**주의**: Supabase SQL Editor에서 다음 명령어를 반드시 실행해야 합니다.
+
+```sql
+CREATE EXTENSION IF NOT EXISTS vector;
+```
+
+#### 4. Domain Generation (Boilerplate)
+
+기획된 도메인(users, assets, transactions 등)을 한 번에 생성합니다.
+
+```bash
+python generate_finance_domain.py
+```
+
+실행 후 입력창에 생성할 도메인을 콤마(,)로 구분하여 입력하세요.
+
+**예시**: `users, assets, transactions, fixed_costs`
+
+#### 5. Running the Server
+
+로컬 개발 서버를 실행합니다.
+
+```bash
+uvicorn app.main:app --reload
+```
+
+서버가 정상적으로 시작되면 **http://localhost:8000/docs** 에서 Swagger UI를 통해 API 명세서를 확인할 수 있습니다.
+
+### 📂 Project Structure
+
+```plaintext
+app/
+├── core/                  # DB 설정 및 공통 보안 설정
+├── domains/               # 기능별 도메인 (Layered Architecture)
+│   └── [domain]/          # router, service, repository, models
+├── main.py                # API 진입점 및 라우터 등록
+└── utils/                 # 공통 유틸리티 함수
+```
+
+### 📝 Roadmap (Work Packages)
+
+- **WP 1**: 전 금융권 데이터 통합 및 보안 인프라 구축
+- **WP 2**: AI 지출 분류 및 현금 흐름 분석
+- **WP 3**: 자동 이체 최적화 및 투자 리밸런싱
+- **WP 4**: 상황별 소비 제안 및 미래 가치 환산
+- **WP 5**: 재무 건강 진단 및 생애 주기 시나리오
+
+### 🤝 Contributing
+
+1. 이슈를 확인하고 브랜치를 생성합니다 (`feature/이슈번호-기능명`).
+2. `generate_finance_domain.py`를 활용해 일관된 구조로 코드를 작성합니다.
+3. PR을 생성하여 리뷰를 요청합니다.
+
+```
+
 ```
