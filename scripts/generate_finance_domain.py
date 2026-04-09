@@ -194,7 +194,7 @@ if __name__ == "__main__":
     init_project_structure()
     
     # 기획된 핵심 도메인 리스트
-    print("\n💡 AI 금융 비서 권장 도메인: users, assets, transactions, fixed_costs, automations, quests")
+    print("\n💡 AI 금융 비서 권장 도메인: users, assets, transactions, coach, investment, automation, planning")
     user_input = input("👉 생성할 도메인 입력: ").strip()
 
     if user_input:

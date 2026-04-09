@@ -1,16 +1,16 @@
-# Path: app/domains/fixed_costs/schemas.py
+# Path: app/domains/coach/schemas.py
 from pydantic import BaseModel, ConfigDict
 from uuid import UUID
 from datetime import datetime
 from typing import Optional
 
-class FixedCostsBase(BaseModel):
+class CoachBase(BaseModel):
     pass
 
-class FixedCostsCreate(FixedCostsBase):
+class CoachCreate(CoachBase):
     pass
 
-class FixedCostsRead(FixedCostsBase):
+class CoachRead(CoachBase):
     id: UUID
     created_at: datetime
     model_config = ConfigDict(from_attributes=True)

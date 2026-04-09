@@ -1,16 +1,16 @@
-# Path: app/domains/automations/schemas.py
+# Path: app/domains/investment/schemas.py
 from pydantic import BaseModel, ConfigDict
 from uuid import UUID
 from datetime import datetime
 from typing import Optional
 
-class AutomationsBase(BaseModel):
+class InvestmentBase(BaseModel):
     pass
 
-class AutomationsCreate(AutomationsBase):
+class InvestmentCreate(InvestmentBase):
     pass
 
-class AutomationsRead(AutomationsBase):
+class InvestmentRead(InvestmentBase):
     id: UUID
     created_at: datetime
     model_config = ConfigDict(from_attributes=True)
