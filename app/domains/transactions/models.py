@@ -1,12 +1,12 @@
 # Path: app/domains/transactions/models.py
 from sqlalchemy import Column, String, DECIMAL, DateTime, ForeignKey, Boolean, text
 from sqlalchemy.dialects.postgresql import UUID
-from pgvector.sqlalchemy import Vector
+# from pgvector.sqlalchemy import Vector
 from datetime import datetime
 from app.core.database import Base
 
-class Transactions(Base):
-    __tablename__ = "transactionss"
+class Transaction(Base):
+    __tablename__ = "transactions"
     # 금융 데이터 보안 및 확장을 위해 UUID 사용
     id = Column(UUID(as_uuid=True), primary_key=True, server_default=text("gen_random_uuid()"))
     

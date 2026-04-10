@@ -1,7 +1,7 @@
 # Path: app/domains/coach/models.py
 from sqlalchemy import Column, String, DECIMAL, DateTime, ForeignKey, Boolean, text
 from sqlalchemy.dialects.postgresql import UUID
-from pgvector.sqlalchemy import Vector
+# from pgvector.sqlalchemy import Vector
 from datetime import datetime
 from app.core.database import Base
 

@@ -1,4 +1,4 @@
-# Path: app/domains/users/services.py
+# app/domains/users/services.py
 from sqlalchemy.orm import Session
 from .repository import UsersRepository
 

@@ -1,12 +1,12 @@
 # Path: app/domains/assets/models.py
 from sqlalchemy import Column, String, DECIMAL, DateTime, ForeignKey, Boolean, text
 from sqlalchemy.dialects.postgresql import UUID
-from pgvector.sqlalchemy import Vector
+# from pgvector.sqlalchemy import Vector
 from datetime import datetime
 from app.core.database import Base
 
-class Assets(Base):
-    __tablename__ = "assetss"
+class Asset(Base):
+    __tablename__ = "assets"
     # 금융 데이터 보안 및 확장을 위해 UUID 사용
     id = Column(UUID(as_uuid=True), primary_key=True, server_default=text("gen_random_uuid()"))
     
