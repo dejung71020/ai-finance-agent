@@ -1,0 +1,19 @@
+# .github/workflows/deploy.yml
+
+name: Deploy to RailWay
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Railway 배포
+        uses: railway-app/railway-github-action@v1
+        with:
+          railway-token: ${{ secrets.RAILWAY_TOKEN }}

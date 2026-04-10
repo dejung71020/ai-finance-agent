@@ -53,7 +53,7 @@ data/
 *.pkl
 *.pt
 *.onnx
-CLAUDE.md
+# CLAUDE.md
 
 # --- IDEs & Editors ---
 .vscode/

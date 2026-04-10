@@ -1,0 +1,41 @@
+# .github/workflows/ci.yml
+
+name: CI
+
+on:
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Python 3.11 설정
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+        
+      - name: 의존성 설치
+        run: pip install -r requirements.txt
+
+      - name: 임포트 검사 (서버 구동 가능 여부)
+        run: python -c "from app.main import app"
+        env:
+          POSTGRESQL_URL: ${{ secrets.POSTGRESQL_URL }}
+          REDIS_URL: ${{ secrets.REDIS_URL }}
+          SECRET_KEY: ${{ secrets.SECRET_KEY }}
+
+      - name: 테스트 실행
+        run: |
+          if [ -d "tests" ]; then
+            pip install pytest pytest-asyncio httpx
+            pytest tests/ -v
+          else
+            echo "테스트 폴더 없음 - 스킵"
+          fi
+        env:
+          POSTGRESQL_URL: ${{ secrets.POSTGRESQL_URL }}
+          REDIS_URL: ${{ secrets.REDIS_URL }}
+          SECRET_KEY: ${{ secrets.SECRET_KEY }}
