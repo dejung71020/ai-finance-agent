@@ -30,6 +30,9 @@ ENV/
 env/
 pythonenv*/
 
+# --- Docker ---
+docker-compose.override.yml
+
 # --- Environment Variables (CRITICAL: 보안을 위해 절대 커밋 금지) ---
 .env
 .env.*
