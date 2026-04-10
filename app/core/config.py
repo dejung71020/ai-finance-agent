@@ -19,7 +19,7 @@ class Settings(BaseSettings):
 
     # --- DB ---
     POSTGRESQL_URL: str = Field(..., alias="POSTGRESQL_URL", description="PostgreSQL 연결 주소")
-    REDIS_URL: str = ""
+    REDIS_URL: str = Field(..., alias="REDIS_URL", description="Redis 연결 주소")
 
     # --- AI API ---
     OPENAI_API_KEY: Optional[str] = None
