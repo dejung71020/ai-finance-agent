@@ -21,7 +21,7 @@ except Exception as e:
     logger.error(f"데이터베이스 엔진 생성 실패 : {str(e)}")
     raise
 
-SessionLocal = sessionmaker(autocommit=False, authoflush=False, bind=engine)
+SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
 
 def get_db():

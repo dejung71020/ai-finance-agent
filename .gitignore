@@ -50,6 +50,7 @@ data/
 *.pkl
 *.pt
 *.onnx
+CLAUDE.md
 
 # --- IDEs & Editors ---
 .vscode/
