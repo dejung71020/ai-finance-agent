@@ -1,34 +1,43 @@
-from app.domains.planning.router import router as planning_router
-from app.domains.automation.router import router as automation_router
-from app.domains.investment.router import router as investment_router
-from app.domains.coach.router import router as coach_router
-from app.domains.transactions.router import router as transactions_router
-from app.domains.assets.router import router as assets_router
-from app.domains.users.router import router as users_router
 # Path: app/main.py
-from fastapi import FastAPI
-from app.core.database import engine, Base
+import logging
+
+from fastapi import FastAPI, Depends, HTTPException
+from sqlalchemy.orm import Session
+from sqlalchemy import text
+
+from app.core.config import settings
+from app.core.database import get_db
+from app.core.lifespan import lifespan
+from app.api.router import router
+
+logging.basicConfig(level=logging.INFO if not settings.DEBUG else logging.DEBUG)
+logger = logging.getLogger(__name__)
 
 app = FastAPI(
-    title="AI Finance Assistant API",
-    description="WP 1~5 통합 금융 비서 백엔드",
-    version="1.0.0"
+    title=settings.PROJECT_NAME,
+    description="개인화 AI 금융 비서 (Finance OS) API",
+    version=settings.VERSION,
+    lifespan=lifespan
 )
-
-# DB 테이블 생성 (최초 실행 시)
-Base.metadata.create_all(bind=engine)
 
 @app.get("/")
 def health_check():
-    return {"status": "running", "project": "AI Finance Assistant"}
+    return {
+        "status": "running",
+        "project": settings.PROJECT_NAME
+        }
 
-# --- [자동 라우터 연동 영역] ---
-# --- ROUTERS START ---
-app.include_router(users_router)
-app.include_router(assets_router)
-app.include_router(transactions_router)
-app.include_router(coach_router)
-app.include_router(investment_router)
-app.include_router(automation_router)
-app.include_router(planning_router)
-# --- ROUTERS END ---
+@app.get("health")
+def health_check(db: Session = Depends(get_db)):
+    try:
+        db.execute(text("SELECT 1"))
+        return {
+            "status": "healthy",
+            "project": settings.PROJECT_NAME,
+            "database": "연결됨"
+        }
+    except Exception as e:
+        logger.error(f"DB 연결 실패: {str(e)}")
+        raise HTTPException(status_code=503, detail="DB 연결 실패")
+
+app.include_router(router)

@@ -1,4 +1,5 @@
 # app/core/config.py
+from functools import lru_cache
 from pydantic_settings import BaseSettings, SettingsConfigDict
 from pydantic import Field, PostgresDsn
 from typing import Optional
@@ -8,6 +9,7 @@ class Settings(BaseSettings):
         env_file=".env",
         env_file_encoding="utf-8",
         case_sensitive=True,
+        extra='ignore'
     )
 
     # --- Project settings ---
@@ -16,7 +18,7 @@ class Settings(BaseSettings):
     DEBUG: bool = False
 
     # --- DB ---
-    POSTGRESQL_URL: str = Field(..., alias="POSTGRESQL_URL")
+    POSTGRESQL_URL: str = Field(..., alias="POSTGRESQL_URL", description="PostgreSQL 연결 주소")
     REDIS_URL: str = ""
 
     # --- AI API ---
@@ -26,7 +28,11 @@ class Settings(BaseSettings):
     XAI_API_KEY: Optional[str] = None
 
     # --- Security ---
-    SECRET_KEY: str = Field(..., alias="SECRET_KEY")
+    SECRET_KEY: str = Field(..., alias="SECRET_KEY", description="JWT 토큰 비밀키")
     ALGORITHM: str = "HS256"
 
-settings = Settings()
+@lru_cache
+def get_settings() -> Settings:
+    return Settings()
+
+settings = get_settings()
