@@ -21,14 +21,14 @@ app = FastAPI(
 )
 
 @app.get("/")
-def health_check():
+def health_check1():
     return {
         "status": "running",
         "project": settings.PROJECT_NAME
         }
 
-@app.get("health")
-def health_check(db: Session = Depends(get_db)):
+@app.get("/health")
+def health_detail(db: Session = Depends(get_db)):
     try:
         db.execute(text("SELECT 1"))
         return {

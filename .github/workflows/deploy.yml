@@ -2,9 +2,10 @@
 
 name: Deploy to RailWay
 
-on:
-  push:
-    branches: [ main ]
+# on:
+#   push:
+#     branches: [ main ]
+on: workflow_dispatch # 임시 - 수동 트리거로 사용
 
 jobs:
   deploy:
