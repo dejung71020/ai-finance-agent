@@ -21,7 +21,7 @@ app = FastAPI(
 )
 
 @app.get("/")
-def health_check1():
+def health_check():
     return {
         "status": "running",
         "project": settings.PROJECT_NAME
