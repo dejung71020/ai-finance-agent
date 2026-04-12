@@ -3,6 +3,7 @@ from fastapi import HTTPException, status
 from sqlalchemy.orm import Session
 
 from app.core.auth import hash_password, verify_password
+from app.core.encryption import encrypt, decrypt
 from .repository import UsersRepository
 from .schemas import UsersCreate
 
@@ -21,7 +22,7 @@ class UsersService:
             email=data.email,
             name=data.name,
             hashed_password=hash_password(data.password),
-            phone=data.phone,
+            phone=encrypt(data.phone) if data.phone else None,
         )
 
     def authenticate_user(self, email: str, password: str):
@@ -32,3 +33,9 @@ class UsersService:
                 detail="이메일 또는 비밀번호가 올바르지 않습니다",
             )
         return user
+    
+    def get_decrypted_phone(self, user) -> str | None:
+        if not user.phone:
+            return None
+        return decrypt(user.phone)
+    

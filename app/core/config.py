@@ -30,7 +30,8 @@ class Settings(BaseSettings):
     # --- Security ---
     SECRET_KEY: str = Field(..., alias="SECRET_KEY", description="JWT 토큰 비밀키")
     ALGORITHM: str = "HS256"
-
+    ENCRYPTION_KEY: str = Field(..., alias="ENCRYPTION_KEY", description="AES-256 암호화 키 (64자 hex)")
+    
 @lru_cache
 def get_settings() -> Settings:
     return Settings()
