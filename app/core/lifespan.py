@@ -19,7 +19,7 @@ async def lifespan(app: FastAPI):
     try:
         if settings.DEBUG:
             logger.info("LIFESPAN: DEBUG MODE\n 전체 테이블 삭제")
-            Base.metatdata.drop_all(bind=engine)        
+            Base.metadata.drop_all(bind=engine)        
         Base.metadata.create_all(bind=engine)
         logger.info("DB 테이블 생성 완료")
     except Exception as e:
