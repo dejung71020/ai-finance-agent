@@ -67,7 +67,7 @@ python scripts/generate_finance_domain.py
 app/
   core/
     config.py          # pydantic-settings + lru_cache 싱글턴, .env 자동 로드
-    database.py        # SQLAlchemy engine/SessionLocal/Base, get_db
+    database.py        # SQLAlchemy engine/SessionLocal/Base(DeclarativeBase 2.0), get_db
     lifespan.py        # 서버 시작: DB 테이블 생성 + Redis 연결 / 종료: 양쪽 해제
     cache.py           # RedisClient — connect/disconnect/get/set/delete
     event_bus.py       # EventBus — Redis Streams XADD 발행, 8개 스트림 초기화
@@ -122,7 +122,7 @@ app/
 
 ## 도메인별 컬럼 정의 시점
 
-각 도메인의 실제 컬럼은 해당 기능 Phase에서 추가한다. 현재 `users` 만 완성 상태.
+각 도메인의 실제 컬럼은 해당 기능 Phase에서 추가한다. 현재 `users`, `assets` 완성 상태.
 
 | 도메인 | 컬럼 완성 Phase | WBS ID |
 |--------|----------------|--------|
@@ -158,8 +158,9 @@ app/
 
 JWT 알고리즘은 `settings.ALGORITHM = "HS256"` (config.py 하드코딩).
 인증 라이브러리: `python-jose[cryptography]`, `passlib[bcrypt]` (이미 requirements.txt에 포함).
+`bcrypt==4.0.1` 버전 고정 필수 — `passlib 1.7.4`는 `bcrypt 4.1+`와 호환되지 않음.
 
-GitHub Actions Secrets에도 동일하게 등록 필요 (`POSTGRESQL_URL`, `REDIS_URL`, `SECRET_KEY`, `RAILWAY_TOKEN`).
+GitHub Actions Secrets에도 동일하게 등록 필요 (`POSTGRESQL_URL`, `REDIS_URL`, `SECRET_KEY`, `ENCRYPTION_KEY`, `RAILWAY_TOKEN`).
 
 ## CI/CD
 
