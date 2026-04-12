@@ -11,6 +11,11 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 > 3. **설명** — 각 코드가 왜 필요한지 이유 설명
 >
 > 파일 자동 수정(Edit/Write 도구)은 사용하지 않는다.
+>
+> **단, CLAUDE.md 업데이트가 필요한 경우는 예외:**
+> 1. 수정이 필요한 항목 목록을 번호와 함께 제시한다
+> 2. 사용자에게 번호를 입력받는다
+> 3. 선택된 항목만 직접 수정(Edit 도구)한다
 
 ## 프로젝트 개요
 
@@ -65,10 +70,10 @@ app/
     database.py        # SQLAlchemy engine/SessionLocal/Base, get_db
     lifespan.py        # 서버 시작: DB 테이블 생성 + Redis 연결 / 종료: 양쪽 해제
     cache.py           # RedisClient — connect/disconnect/get/set/delete
-    event_bus.py       # [예정 0.2.3] EventBus — Redis Streams XADD/XREADGROUP 추상화
+    event_bus.py       # EventBus — Redis Streams XADD 발행, 8개 스트림 초기화
     events/
-      schemas.py       # [예정 0.2.3] EventEnvelope Pydantic 모델
-    auth.py            # [예정 0.3.1] JWT 액세스/리프레시 토큰
+      schemas.py       # EventEnvelope Pydantic 모델
+    auth.py            # JWT 액세스(30분)/리프레시(7일) 토큰, get_current_user Depends
     encryption.py      # [예정 0.3.3] AES-256 암호화
   api/
     router.py          # 모든 도메인 라우터를 prefix="/api"로 통합 (ROUTERS START/END 마커)
@@ -112,6 +117,8 @@ app/
 - `settings`는 `from app.core.config import settings`로 어디서든 import
 - 도메인 모델 클래스명은 **단수** 사용 (`User`, `Asset`, `Transaction`, `Investment`, `CoachSession`, `AutomationRule`, `PlanningGoal`)
 - 이벤트 발행은 반드시 **DB 커밋 성공 후**에 실행 (미커밋 데이터 이벤트 금지)
+- 보호된 엔드포인트는 `Depends(get_current_user)` 사용 (`from app.core.auth import get_current_user`)
+- 이벤트 발행: `await event_bus.publish(stream, EventEnvelope(...))` — DB 커밋 후 호출
 
 ## 도메인별 컬럼 정의 시점
 
@@ -156,11 +163,7 @@ GitHub Actions Secrets에도 동일하게 등록 필요 (`POSTGRESQL_URL`, `REDI
 ## CI/CD
 
 - **CI** (`ci.yml`): PR → main 브랜치 시 `python -c "from app.main import app"` 임포트 검사 + `pytest tests/ -v` (tests 폴더 없으면 스킵)
-- **Deploy** (`deploy.yml`): main 브랜치 push 시 Railway 배포
-
-## 알려진 버그
-
-- `app/main.py` 30번째 줄: `@app.get("health")` → `@app.get("/health")`로 수정 필요 (슬래시 누락)
+- **Deploy** (`deploy.yml`): 현재 `workflow_dispatch` (수동 실행) — Phase 7 배포 환경 구성 시 자동화 예정
 
 ## 진행 현황
 
@@ -172,9 +175,9 @@ GitHub Actions Secrets에도 동일하게 등록 필요 (`POSTGRESQL_URL`, `REDI
 - ✅ 0.1.5 GitHub Actions CI/CD
 - ✅ 0.2.1 Layered Architecture 설계 (도메인 구조 확정)
 - ✅ 0.2.2 도메인 스캐폴딩 완성 (7개 도메인 폴더 생성, users 컬럼 완성)
-- ✅ 0.2.3 이벤트 기반 구조 설계 → `docs/0.2.3_event_driven_architecture.md`
+- ✅ 0.2.3 이벤트 기반 구조 설계 + 구현 → `docs/0.2.3_event_driven_architecture.md`, `app/core/event_bus.py`
+- ✅ 0.3.1 JWT 인증 → `app/core/auth.py`, `docs/0.3.1.md`
 
 ### Phase 0 진행 중 🔄
-- ⬜ 0.3.1 JWT 인증 → `app/core/auth.py`
-- ⬜ 0.3.2 OAuth 연동 (카카오/네이버)
+- ⬜ 0.3.2 OAuth 연동 (카카오/네이버) — 외부 API 키 필요, 후순위
 - ⬜ 0.3.3 AES-256 암호화 → `app/core/encryption.py`
