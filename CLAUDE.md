@@ -74,7 +74,7 @@ app/
     events/
       schemas.py       # EventEnvelope Pydantic 모델
     auth.py            # JWT 액세스(30분)/리프레시(7일) 토큰, get_current_user Depends
-    encryption.py      # [예정 0.3.3] AES-256 암호화
+    encryption.py      # AES-256-GCM 암호화/복호화 (encrypt/decrypt)
   api/
     router.py          # 모든 도메인 라우터를 prefix="/api"로 통합 (ROUTERS START/END 마커)
   domains/
@@ -100,7 +100,7 @@ app/
 - **DB 세션**: `get_db()`는 예외 발생 시 자동 `rollback()` 후 `close()`
 - **Redis**: `get()`은 JSON 자동 역직렬화, `set()`은 dict/list를 JSON으로 자동 직렬화, 기본 TTL 3600초
 - **커넥션 풀**: `pool_size=10`, `max_overflow=20`, `pool_recycle=3600`, `pool_pre_ping=True`
-- **lifespan**: 서버 시작 시 `Base.metadata.create_all()` + Redis PING, 종료 시 양쪽 해제
+- **lifespan**: 서버 시작 시 `DEBUG=True`면 `drop_all()` 후 `create_all()` (스키마 초기화), `DEBUG=False`면 `create_all()`만 실행. Redis PING 후 이벤트 스트림 초기화. 종료 시 양쪽 해제
 
 ### 이벤트 기반 구조 (0.2.3 설계 확정)
 
@@ -127,7 +127,7 @@ app/
 | 도메인 | 컬럼 완성 Phase | WBS ID |
 |--------|----------------|--------|
 | `users` | ✅ 완성 | — |
-| `assets` | Phase 1 (3주차) | 1.4.1 |
+| `assets` | ✅ 완성 | 1.4.1 |
 | `transactions` | Phase 1 (3주차) | 1.4.2 |
 | `investment` | Phase 1 (4주차) | 1.2.2 |
 | `automation` | Phase 2 (6주차) | 2.3.x |
@@ -149,7 +149,8 @@ app/
 | `POSTGRESQL_URL` | ✅ | Supabase PostgreSQL 연결 주소 |
 | `REDIS_URL` | ✅ | Upstash Redis 연결 주소 |
 | `SECRET_KEY` | ✅ | JWT 서명 키 |
-| `DEBUG` | - | `True` 시 SQL 쿼리 로그 출력 + DEBUG 레벨 로깅 |
+| `ENCRYPTION_KEY` | ✅ | AES-256 암호화 키 (64자 hex, `python -c "import os; print(os.urandom(32).hex())"` 로 생성) |
+| `DEBUG` | - | `True` 시 SQL 쿼리 로그 출력 + 서버 시작 시 테이블 전체 초기화 |
 | `GOOGLE_API_KEY` | - | |
 | `OPENAI_API_KEY` | - | |
 | `ANTHROPIC_API_KEY` | - | |
@@ -176,8 +177,12 @@ GitHub Actions Secrets에도 동일하게 등록 필요 (`POSTGRESQL_URL`, `REDI
 - ✅ 0.2.1 Layered Architecture 설계 (도메인 구조 확정)
 - ✅ 0.2.2 도메인 스캐폴딩 완성 (7개 도메인 폴더 생성, users 컬럼 완성)
 - ✅ 0.2.3 이벤트 기반 구조 설계 + 구현 → `docs/0.2.3_event_driven_architecture.md`, `app/core/event_bus.py`
-- ✅ 0.3.1 JWT 인증 → `app/core/auth.py`, `docs/0.3.1.md`
+- ✅ 0.3.1 JWT 인증 → `app/core/auth.py`
+- ✅ 0.3.3 AES-256-GCM 암호화 → `app/core/encryption.py`
 
-### Phase 0 진행 중 🔄
+### Phase 0 보류 ⏸
 - ⬜ 0.3.2 OAuth 연동 (카카오/네이버) — 외부 API 키 필요, 후순위
-- ⬜ 0.3.3 AES-256 암호화 → `app/core/encryption.py`
+
+### Phase 1 진행 중 🔄
+- ✅ 1.4.1 Assets 테이블 설계/구현 → `app/domains/assets/`
+- ⬜ 1.4.2 Transactions 테이블 설계/구현
