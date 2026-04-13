@@ -1,13 +1,13 @@
-# app/domains/assets/schemas.py
+# app/domains/asset/schemas.py
 from pydantic import BaseModel, ConfigDict
 from uuid import UUID
 from datetime import datetime
 from decimal import Decimal
 from typing import Optional
 
-from app.domains.assets.models import AssetType
+from app.domains.asset.models import AssetType
 
-class AssetsBase(BaseModel):
+class AssetBase(BaseModel):
     name: str
     institution: str
     asset_type: AssetType
@@ -15,10 +15,10 @@ class AssetsBase(BaseModel):
     balance: Decimal = Decimal("0")
     currency: str = "KRW"
 
-class AssetsCreate(AssetsBase):
+class AssetCreate(AssetBase):
     pass
 
-class AssetsRead(AssetsBase):
+class AssetRead(AssetBase):
     id: UUID
     user_id: UUID
     is_active: bool

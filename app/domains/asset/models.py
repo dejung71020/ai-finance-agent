@@ -1,4 +1,4 @@
-# app/domains/assets/models.py
+# app/domains/asset/models.py
 import enum
 from sqlalchemy import Column, String, DECIMAL, DateTime, Enum, ForeignKey, Boolean, text
 from sqlalchemy.dialects.postgresql import UUID

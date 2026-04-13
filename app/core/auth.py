@@ -49,7 +49,8 @@ def get_current_user(
         db: Session = Depends(get_db),
 ):
     """
-    보호된 엔드포인트의 Depends로 사용. 유효한 유저 객체를 반환.
+    보호된 엔드포인트의 Depends로 사용. 
+    유효한 유저 객체를 반환.
     """
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,

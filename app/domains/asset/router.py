@@ -5,35 +5,35 @@ from uuid import UUID
 
 from app.core.database import get_db
 from app.core.auth import get_current_user
-from .services import AssetsService
-from .schemas import AssetsRead, AssetsCreate
+from .services import AssetService
+from .schemas import AssetRead, AssetCreate
 
 router = APIRouter(prefix='/assets', tags=['Assets'])
 
 
-@router.post("", response_model=AssetsRead, status_code=201)
+@router.post("", response_model=AssetRead, status_code=201)
 def create_asset(
-    data: AssetsCreate,
+    data: AssetCreate,
     db: Session = Depends(get_db),
     current_user=Depends(get_current_user),
 ):
-    return AssetsService(db).create_asset(current_user.id, data)
+    return AssetService(db).create_asset(current_user.id, data)
     
-@router.get("", response_model=list[AssetsRead])
+@router.get("", response_model=list[AssetRead])
 def get_my_assets(
     db: Session = Depends(get_db),
     current_user=Depends(get_current_user),
 ):
-    return AssetsService(db).get_my_assets(current_user.id)
+    return AssetService(db).get_my_assets(current_user.id)
 
 
-@router.get("/{id}", response_model=AssetsRead)
+@router.get("/{id}", response_model=AssetRead)
 def get_assets(
     id: UUID, 
     db: Session = Depends(get_db),
     current_user = Depends(get_current_user)
     ):
-    return AssetsService(db).get_asset(current_user.id, id)
+    return AssetService(db).get_asset(current_user.id, id)
 
 @router.delete("/{id}", status_code=204)
 def delete_asset(
@@ -41,4 +41,4 @@ def delete_asset(
     db: Session = Depends(get_db),
     current_user = Depends(get_current_user)
 ):
-    AssetsService(db).delete_asset(current_user.id, id)
+    AssetService(db).delete_asset(current_user.id, id)

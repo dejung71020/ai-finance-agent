@@ -1,15 +1,15 @@
-# app/domains/assets/repository.py
+# app/domains/asset/repository.py
 from sqlalchemy.orm import Session
 from uuid import UUID
 from decimal import Decimal
 from .models import Asset
 
-class AssetsRepository:
+class AssetRepository:
     def __init__(self, db: Session):
         self.db = db
 
-    def get_by_id(self, obj_id: UUID):
-        return self.db.query(Asset).filter(Asset.id == obj_id).first()
+    def get_by_id(self, asset_id: UUID):
+        return self.db.query(Asset).filter(Asset.id == asset_id).first()
     
     def get_by_user_id(self, user_id: UUID):
         return self.db.query(Asset).filter(
@@ -40,8 +40,8 @@ class AssetsRepository:
         self.db.refresh(asset)
         return asset
     
-    def update_balance(self, obj_id: UUID, balance: Decimal) -> Asset | None:
-        asset = self.get_by_id(obj_id)
+    def update_balance(self, asset_id: UUID, balance: Decimal) -> Asset | None:
+        asset = self.get_by_id(asset_id)
         if not asset:
             return None
         asset.balance = balance
@@ -49,8 +49,8 @@ class AssetsRepository:
         self.db.refresh(asset)
         return asset
     
-    def delete(self, obj_id: UUID) -> bool:
-        asset = self.get_by_id(obj_id)
+    def delete(self, asset_id: UUID) -> bool:
+        asset = self.get_by_id(asset_id)
         if not asset:
             return False
         asset.is_active = False

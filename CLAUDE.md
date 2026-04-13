@@ -115,20 +115,22 @@ app/
 - DB 세션은 모든 라우터에서 `Depends(get_db)` 사용
 - Redis는 `from app.core.cache import redis_client` — lifespan이 자동 관리
 - `settings`는 `from app.core.config import settings`로 어디서든 import
+- 도메인 폴더명은 **단수** 사용 (`asset/`, `transaction/`, `investment/` 등) — URL prefix만 복수 (`/assets`, `/transactions`)
 - 도메인 모델 클래스명은 **단수** 사용 (`User`, `Asset`, `Transaction`, `Investment`, `CoachSession`, `AutomationRule`, `PlanningGoal`)
+- Service/Repository/Schema 클래스명도 **단수** 사용 (`AssetService`, `TransactionRepository`, `AssetCreate` 등)
 - 이벤트 발행은 반드시 **DB 커밋 성공 후**에 실행 (미커밋 데이터 이벤트 금지)
 - 보호된 엔드포인트는 `Depends(get_current_user)` 사용 (`from app.core.auth import get_current_user`)
 - 이벤트 발행: `await event_bus.publish(stream, EventEnvelope(...))` — DB 커밋 후 호출
 
 ## 도메인별 컬럼 정의 시점
 
-각 도메인의 실제 컬럼은 해당 기능 Phase에서 추가한다. 현재 `users`, `assets` 완성 상태.
+각 도메인의 실제 컬럼은 해당 기능 Phase에서 추가한다. 현재 `users`, `asset`, `transaction` 완성 상태.
 
 | 도메인 | 컬럼 완성 Phase | WBS ID |
 |--------|----------------|--------|
 | `users` | ✅ 완성 | — |
-| `assets` | ✅ 완성 | 1.4.1 |
-| `transactions` | Phase 1 (3주차) | 1.4.2 |
+| `asset` | ✅ 완성 | 1.4.1 |
+| `transaction` | ✅ 완성 | 1.4.2 |
 | `investment` | Phase 1 (4주차) | 1.2.2 |
 | `automation` | Phase 2 (6주차) | 2.3.x |
 | `coach` | Phase 5 (8주차) | 5.x.x |
@@ -147,7 +149,7 @@ app/
 | 변수 | 필수 | 설명 |
 |------|------|------|
 | `POSTGRESQL_URL` | ✅ | Supabase PostgreSQL 연결 주소 |
-| `REDIS_URL` | ✅ | Upstash Redis 연결 주소 |
+| `REDIS_URL` | ✅ | Upstash Redis 연결 주소 (**`rediss://`** TLS 필수, `redis://` 아님) |
 | `SECRET_KEY` | ✅ | JWT 서명 키 |
 | `ENCRYPTION_KEY` | ✅ | AES-256 암호화 키 (64자 hex, `python -c "import os; print(os.urandom(32).hex())"` 로 생성) |
 | `DEBUG` | - | `True` 시 SQL 쿼리 로그 출력 + 서버 시작 시 테이블 전체 초기화 |
@@ -185,5 +187,5 @@ GitHub Actions Secrets에도 동일하게 등록 필요 (`POSTGRESQL_URL`, `REDI
 - ⬜ 0.3.2 OAuth 연동 (카카오/네이버) — 외부 API 키 필요, 후순위
 
 ### Phase 1 진행 중 🔄
-- ✅ 1.4.1 Assets 테이블 설계/구현 → `app/domains/assets/`
-- ⬜ 1.4.2 Transactions 테이블 설계/구현
+- ✅ 1.4.1 Assets 테이블 설계/구현 → `app/domains/asset/`
+- ✅ 1.4.2 Transactions 테이블 설계/구현 → `app/domains/transaction/`

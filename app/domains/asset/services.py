@@ -4,14 +4,14 @@ from sqlalchemy.orm import Session
 from uuid import UUID
 
 from app.core.encryption import encrypt
-from .repository import AssetsRepository
-from .schemas import AssetsCreate
+from .repository import AssetRepository
+from .schemas import AssetCreate
 
-class AssetsService:
+class AssetService:
     def __init__(self, db: Session):
-        self.repo = AssetsRepository(db)
+        self.repo = AssetRepository(db)
         
-    def create_asset(self, user_id: UUID, data: AssetsCreate):
+    def create_asset(self, user_id: UUID, data: AssetCreate):
         return self.repo.create(
             user_id=user_id,
             name=data.name,
