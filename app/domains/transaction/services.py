@@ -7,13 +7,24 @@ from app.core.event_bus import event_bus
 from app.core.events.schemas import EventEnvelope
 from .repository import TransactionRepository
 from .schemas import TransactionCreate
+from .category_classifier import classify_category
 
 class TransactionService:
     def __init__(self, db: Session):
         self.repo = TransactionRepository(db)
         
     async def create_transaction(self, user_id: UUID, data: TransactionCreate):
-        tx = self.repo.create(user_id, data)
+        # 카테고리 미 입력 시 AI 자동 분류
+        category = data.category
+        if not category:
+            category = await classify_category(
+                merchant=data.merchant,
+                description=data.description,
+                transaction_type=data.transaction_type.value,
+                amount=str(data.amount),
+            )
+            
+        tx = self.repo.create(user_id, data, category)
 
         await event_bus.publish(
             "finance:transactions",

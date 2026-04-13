@@ -23,7 +23,7 @@ class Settings(BaseSettings):
 
     # --- AI API ---
     OPENAI_API_KEY: Optional[str] = None
-    GOOGLE_API_KEY: Optional[str] = None
+    GEMINI_API_KEY: Optional[str] = None
     ANTHROPIC_API_KEY: Optional[str] = None
     XAI_API_KEY: Optional[str] = None
 

@@ -26,13 +26,13 @@ class TransactionRepository:
             .all()
         )
     
-    def create(self, user_id: UUID, data) -> Transaction:
+    def create(self, user_id: UUID, data, category: str) -> Transaction:
         tx = Transaction(
             user_id = user_id,
             asset_id = data.asset_id,
             amount = data.amount,
             transaction_type = data.transaction_type,
-            category = data.category,
+            category = category,
             description = data.description,
             merchant = data.merchant,
             transacted_at = data.transacted_at,
